@@ -44,7 +44,7 @@ return [
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
-            'hash' => false,
+            'hash' => true, //Cambiar esto para permitir tokens codificados
         ],
     ],
 
