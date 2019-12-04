@@ -18,5 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::get('/books','BookController@');
 Route::middleware('auth:api')->post('/books','LigasController@crear');
+
 Route::middleware('auth:api')->put('/ligas/{id}/modificar','LigasController@modificar');
 Route::middleware('auth:api')->delete('/ligas/{id}/borrar','LigasController@borrar');

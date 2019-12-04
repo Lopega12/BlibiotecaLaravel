@@ -14,10 +14,9 @@ class CreatePrestamosTable extends Migration
     public function up()
     {
         Schema::create('prestamos', function (Blueprint $table) {
-            $table->bigInteger('id');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('id_book');
             $table->unsignedBigInteger('id_user');
-            $table->primary(['id','id_book','id_user']);
             $table->foreign('id_book')->references('id')->on('books');
             $table->foreign('id_user')->references('id')->on('users');
             $table->dateTime('date_devol');
