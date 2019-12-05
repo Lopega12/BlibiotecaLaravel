@@ -16,8 +16,20 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/books','BookController@');
-Route::middleware('auth:api')->post('/books','LigasController@crear');
+Route::get('/books','BookController@showAll');
+Route::get('/books/genero/{slug}','BookController@showByGenero')->name('BookController');
+Route::get('/books/autor/{slug}','BookController@showByAutor')->name('BookController');
 
-Route::middleware('auth:api')->put('/ligas/{id}/modificar','LigasController@modificar');
-Route::middleware('auth:api')->delete('/ligas/{id}/borrar','LigasController@borrar');
+Route::middleware('auth:api')->post('/books/create','BookController@createBook');
+Route::middleware('auth:api')->put('/books/edit/{slug}','BookController@editBook');
+Route::middleware('auth:api')->delete('/books/drop/{slug}','BookController@dropBook');
+
+Route::middleware('auth:api')->post('/prestamos/prestar','PrestamosController@makePrestamo');
+Route::middleware('auth:api')->post('/prestamos/devolver','PrestamosController@devolPrestamo');
+
+
+
+
+
+Route::post('register', 'AuthController@register');
+

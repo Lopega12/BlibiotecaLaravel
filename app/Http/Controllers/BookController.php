@@ -14,15 +14,15 @@ class BookController extends Controller
     }
     public function showByGenero($genero){
         $response = Array('codigo_error' =>404, 'message'=>'Libro/s no encontrados con genero'.$genero);
-        $library = Book::all()->where('genero','like',$genero);
+        $library = Book::all()->where('genero',$genero);
         if(!empty($library)){
             $response = $library;
         }
         return response()->json($response);
     }
     public function showByAutor($autor){
-        $response = Array('codigo_error' =>404, 'message'=>'Libro/s no encontrados con autor'.$autor);
-        $library = Book::all()->where('genero','like',$autor);
+        $response = Array('codigo_error' =>404, 'message'=>'Libros no encontrados con autor'.$autor);
+        $library = Book::all()->where('autor',$autor);
         if(!empty($library)){
             $response = $library;
         }
@@ -34,9 +34,9 @@ class BookController extends Controller
         if(!empty($r)){
             try{
                 $book->titulo = $r->titulo;
-                $book->sinopsis = $r->sinopsis;
+                $book->sinposis = $r->sinposis;
                 $book->genero = $r->genero;
-                if(isset($r->autor) && !emtpy($r->autor)){
+                if(isset($r->autor) && !empty($r->autor)){
                     $book->autor = $r->autor;
                 }else{
                     $book->autor = 'Desconocido';
@@ -68,20 +68,10 @@ class BookController extends Controller
                 }
             }
             if(isset($r->sinopsis)){
-                if(!empty($r->sinopsis)){
-                    $book->sinopsis = $r->sinopsis;
-                }else{
-                    $errores.= "Sinposis obligatorio";
-                    $correcto = false;
-                }
+                $book->sinopsis = $r->sinopsis;
             }
             if(isset($r->genero)){
-                if(!empty($r->genero)){
-                    $book->genero = $r->genero;
-                }else{
-                    $correcto = false;
-                    $errores.= "Genero es obligatorio";
-                }
+                $book->genero = $r->genero;
             }
             if(isset($r->autor)){
                 if(!empty($r->autor)){
@@ -90,9 +80,11 @@ class BookController extends Controller
                     $book->autor = 'Desconocido';
                 }
             }
+
            if($correcto){
                try{
                    $book->save();
+                   $resp = array('codigo_error'=>200,'message'=>'sucess');
                }catch (\Exception $ex){
                    $resp = array('codigo_error'=>500,'message'=>$ex->getMessage());
                }

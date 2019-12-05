@@ -19,7 +19,7 @@ class CreatePrestamosTable extends Migration
             $table->unsignedBigInteger('id_user');
             $table->foreign('id_book')->references('id')->on('books');
             $table->foreign('id_user')->references('id')->on('users');
-            $table->dateTime('date_devol');
+            $table->dateTime('date_devol')->nullable(true);
             $table->dateTime('date_prestamo');
             $table->timestamps();
         });
