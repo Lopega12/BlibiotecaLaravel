@@ -17,11 +17,12 @@ class AuthController extends Controller
         $user->name= $input['name'];
         $user->email= $input['email'];
         $user->password= $input['password'];
-        $user->token =  Str::random(255);
+        $api_token = Str::random(8);
+        $user->api_token =  hash('sha256',$api_token);
         try{
            $user->save();
            $res['error']= 200;
-           $res['message']= 'Usuario creado correcto';
+           $res['message']= 'Usuario creado correcto: '.$api_token;
         }catch(Exception $ex){
             $res['message'] = $ex->getMessage();
         }

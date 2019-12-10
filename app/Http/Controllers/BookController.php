@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Book;
 use DemeterChain\B;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -14,7 +15,7 @@ class BookController extends Controller
     }
     public function showByGenero($genero){
         $response = Array('codigo_error' =>404, 'message'=>'Libro/s no encontrados con genero'.$genero);
-        $library = Book::all()->where('genero',$genero);
+        $library = Book::all()->where('genero', ucfirst (strtolower ($genero)));
         if(!empty($library)){
             $response = $library;
         }
@@ -22,7 +23,7 @@ class BookController extends Controller
     }
     public function showByAutor($autor){
         $response = Array('codigo_error' =>404, 'message'=>'Libros no encontrados con autor'.$autor);
-        $library = Book::all()->where('autor',$autor);
+        $library = DB::table('books')->where('autor','like ','%'.$autor.'%')->orWhere('autor','like','%'.$autor)->orWhere('autor','like',$autor.'%')->get();
         if(!empty($library)){
             $response = $library;
         }
@@ -33,11 +34,11 @@ class BookController extends Controller
         $book = new Book();
         if(!empty($r)){
             try{
-                $book->titulo = $r->titulo;
-                $book->sinposis = $r->sinposis;
-                $book->genero = $r->genero;
+                $book->titulo = ucfirst (strtolower ($r->titulo));
+                $book->sinposis = ucfirst (strtolower ($r->sinposis));
+                $book->genero = ucfirst(strtolower ($r->genero));
                 if(isset($r->autor) && !empty($r->autor)){
-                    $book->autor = $r->autor;
+                    $book->autor = ucfirst(strtolower ($r->autor));
                 }else{
                     $book->autor = 'Desconocido';
                 }
@@ -60,22 +61,32 @@ class BookController extends Controller
         if(!empty($book)){
             $errores= "";
             if(isset($r->titulo)){
-                if(!empty($r->titulo)){
-                    $book->titulo = $r->titulo;
+                if(!is_null($r->titulo)){
+                    $book->titulo = ucfirst(strtolower ($r->titulo));
                 }else{
-                    $errores.= "Titulo es obligatorio";
                     $correcto = false;
+                    $resp['message'].='Book,should contain Titulo';
                 }
             }
             if(isset($r->sinopsis)){
-                $book->sinopsis = $r->sinopsis;
+                if(!is_null($r->sinopsis)){
+                    $book->sinopsis = ucfirst(strtolower ($r->sinopsis));
+                }else{
+                    $correcto = false;
+                    $resp['message'].='Book,shold be contain sinopsis';
+                }
             }
             if(isset($r->genero)){
-                $book->genero = $r->genero;
+                if(!is_null($r->genero)){
+                    $book->genero = ucfirst(strtolower ($r->genero));
+                }else{
+                    $correcto = false;
+                     $resp['message'].='Book,should be contain genero';
+                }
             }
             if(isset($r->autor)){
-                if(!empty($r->autor)){
-                    $book->autor = $r->autor;
+                if(!is_null($r->autor)){
+                    $book->autor = ucfirst(strtolower ($r->autor));
                 }else{
                     $book->autor = 'Desconocido';
                 }
@@ -89,7 +100,7 @@ class BookController extends Controller
                    $resp = array('codigo_error'=>500,'message'=>$ex->getMessage());
                }
            }else{
-               $resp = array('codigo_error'=>400,'message'=>$errores);
+               $resp = array('codigo_error'=>300,'message'=>$resp['message']);
            }
             return response()->json($resp);
         }

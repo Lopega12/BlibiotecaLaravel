@@ -26,10 +26,13 @@ Route::middleware('auth:api')->delete('/books/drop/{slug}','BookController@dropB
 
 Route::middleware('auth:api')->post('/prestamos/prestar','PrestamosController@makePrestamo');
 Route::middleware('auth:api')->post('/prestamos/devolver','PrestamosController@devolPrestamo');
+Route::middleware('auth:api')->get('/prestamos/{id}','PrestamosController@allPrestamos');
+Route::middleware('auth:api')->get('/prestamos/devol/{id}','PrestamosController@allDevoluciones');
 
 
 
 
 
 Route::post('register', 'AuthController@register');
+
 

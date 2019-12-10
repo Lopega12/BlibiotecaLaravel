@@ -6,6 +6,7 @@ use App\Book;
 use App\Prestamo;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PrestamosController extends Controller
 {
@@ -13,8 +14,8 @@ class PrestamosController extends Controller
 
         $res = ['error'=>404,'message'=>'Libro o usuario no registrado'];
         if(isset($r->user) && !empty($r->user) && isset($r->libro) && !empty($r->libro)){
-            $libro = Book::where('id',$r->libro);
-            $user = User::where('id',$r->user);
+            $libro = Book::find($r->user);
+            $user = User::find($r->user);
 
             if(!empty($libro) && !empty($user)){
                 $prestamo = new Prestamo();
@@ -52,5 +53,13 @@ class PrestamosController extends Controller
             }
         }
         return response()->json($res);
+    }
+    public function allPrestamos($user){
+        $prestamos = DB::table('prestamos')->where('id_user',$user)->whereNull('date_devol')->get();
+        return response()->json($prestamos);
+    }
+    public function allDevoluciones($user){
+        $prestamos = DB::table('prestamos')->where('id_user',$user)->whereNotNull('date_devol')->get();
+        return response()->json($prestamos);
     }
 }
