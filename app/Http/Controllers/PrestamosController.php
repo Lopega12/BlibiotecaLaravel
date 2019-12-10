@@ -14,8 +14,8 @@ class PrestamosController extends Controller
 
         $res = ['error'=>404,'message'=>'Libro o usuario no registrado'];
         if(isset($r->user) && !empty($r->user) && isset($r->libro) && !empty($r->libro)){
-            $libro = Book::find($r->user);
-            $user = User::find($r->user);
+            $libroBDD = Book::find($r->user);
+            $userBDD = User::find($r->user);
 
             if(!empty($libro) && !empty($user)){
                 $prestamo = new Prestamo();
