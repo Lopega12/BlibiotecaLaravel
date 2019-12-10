@@ -28,10 +28,12 @@ class PrestamosController extends Controller
                 }catch(Exception $e){
                     $res = ['error'=>500,'message'=>$e->getMessage()];
                 }
+            }else{
+                $res = ['error'=>404,'message'=>'Recurso no encontrado'];
             }
 
         }else{
-            $res = ['error'=>400,'message'=>'El id del libro es necesario/como usuario registrado'];
+            $res = ['error'=>400,'message'=>'El id del libro es necesaro o es necesario un usuario registrado'];
         }
         return response()->json($res);
     }
@@ -59,7 +61,7 @@ class PrestamosController extends Controller
         return response()->json($prestamos);
     }
     public function allDevoluciones($user){
-        $prestamos = DB::table('prestamos')->where('id_user',$user)->whereNotNull('date_devol')->get();
+        $prestamos = DB::table('prestamos')->where('id_user',$user)->whereNotNull('date_devol')->get(['id','id_libro','']);
         return response()->json($prestamos);
     }
 }

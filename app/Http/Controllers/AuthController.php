@@ -5,6 +5,12 @@ use App\User;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Exception;
 use Illuminate\Support\Str;
+
+/**
+ * Class AuthController
+ * @package App\Http\Controllers
+ * Clase personalizada para crear un usuario a traves de la api
+ */
 class AuthController extends Controller
 {
     public $successStatus = 200;
