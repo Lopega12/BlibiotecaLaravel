@@ -17,7 +17,7 @@ class PrestamosController extends Controller
             $libroBDD = Book::find($r->user);
             $userBDD = User::find($r->user);
 
-            if(!empty($libro) && !empty($user)){
+            if(!empty($libroBDD) && !empty($userBDD)){
                 $prestamo = new Prestamo();
                 $prestamo->id_book = $r->libro;
                 $prestamo->id_user = $r->user;
@@ -51,7 +51,7 @@ class PrestamosController extends Controller
                     $res = ['error'=>400,'message'=>$e->getMessage()];
                 }
             }else{
-                $res = ['error'=>300,'message'=> 'El libro ya ha sido devuelto'];
+                $res = ['error'=>400,'message'=> 'El libro ya ha sido devuelto'];
             }
         }
         return response()->json($res);
@@ -61,7 +61,7 @@ class PrestamosController extends Controller
         return response()->json($prestamos);
     }
     public function allDevoluciones($user){
-        $prestamos = DB::table('prestamos')->where('id_user',$user)->whereNotNull('date_devol')->get(['id','id_libro','']);
+        $prestamos = DB::table('prestamos')->where('id_user',$user)->whereNotNull('date_devol')->get();
         return response()->json($prestamos);
     }
 }
