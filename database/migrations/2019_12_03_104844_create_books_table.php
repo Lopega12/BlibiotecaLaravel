@@ -19,6 +19,7 @@ class CreateBooksTable extends Migration
             $table->longText('sinposis')->nullable(false);
             $table->string('genero')->nullable(false)->default('Sin genero');
             $table->string('autor')->nullable(false)->default('Desconocido');
+            $table->string('portada');
             $table->timestamps();
         });
     }

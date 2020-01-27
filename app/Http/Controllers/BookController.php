@@ -119,6 +119,40 @@ class BookController extends Controller
         return response()->json($resp);
     }
 
+    public function index(){
+        return view('newBook');
+    }
+    public function save(){
+          $dirname = substr(dirname(__FILE__),0,strripos(dirname(__FILE__),'storage'));
+        if(isset($_POST['enviar'])){
+            $title = (isset($_POST['name'])) ? $_POST['name'] : "";
+            $autor = (isset($_POST['autor'])) ? $_POST['autor'] : 'Desconocido';
+            $genero = (isset($_POST['genero'])) ? $_POST['genero'] : '';
+            $sinop = (isset($_POST['sinop'])) ? $_POST['sinop'] : "";
+            $portada = (isset($_FILES['photo']) && !empty($_FILES['photo'])) ? $_FILES['photo'] : "";
+            if($portada['error'] == 0 && ($portada['type'] =='image/x-png' ||$portada['type'] == 'image/gif' ||$portada['type'] =='image/jpeg')){
+                if(move_uploaded_file($portada['tmp_name'],$dirname.$portada['name'])){
+
+                    $book = new Book();
+                    $book->titulo =  $title;
+                    $book->sinposis = $sinop;
+                    $book->autor = $autor;
+                    $book->genero = $genero;
+                    $book->portada = $dirname.$portada['name'];
+                    $book->save();
+                    $data = "libro subido correctamente";
+                }
+
+            }
+
+            // var_dump($portada);
+            //print("$title, $autor, $genero, $sinop");
+
+        }
+        return view('newBook', ['data' => $data
+        ]);
+    }
+
 
 
 }
